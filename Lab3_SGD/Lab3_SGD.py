@@ -85,12 +85,18 @@ class SGD_Ridge:
     def DrawPlot(self):
         pred = np.dot(self.X_train, self.w)
         plt.plot(self.Y_train, pred, 'ro')
+        plt.xlabel('y')
+        plt.ylabel('y_predicted')
+        plt.title('Ответ vs. Предсказание')
         plt.show()
 
     def DrawEduPlot(self, arr):
         data = np.array(arr)
         data = data.T
         plt.plot(data[0], data[1], 'ro')
+        plt.xlabel('tau')
+        plt.ylabel('r2')
+        plt.title('R^2 Score vs. Tau On Test')
         plt.show()
 
 
