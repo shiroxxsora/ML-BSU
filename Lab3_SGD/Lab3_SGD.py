@@ -65,6 +65,7 @@ class SGD_Ridge:
         r2 = self.r_squared(self.Y_test, pred)
 
         return r2
+        
     def PredictTrain(self):
         pred = np.dot(self.X_train, self.w)
         r2 = self.r_squared(self.Y_train, pred)
