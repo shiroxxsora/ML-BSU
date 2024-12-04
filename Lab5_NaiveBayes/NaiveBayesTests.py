@@ -7,8 +7,8 @@ from NaiveBayesRealization import *
 from ucimlrepo import fetch_ucirepo 
   
 # Получение датасета
-#dry_bean = fetch_ucirepo(id = 602)
-dry_bean = fetch_ucirepo(id = 53) 
+dry_bean = fetch_ucirepo(id = 602)
+#dry_bean = fetch_ucirepo(id = 53) 
   
 # Данные (pandas dataframes) 
 X = dry_bean.data.features.values
@@ -18,7 +18,7 @@ print(features)
 
 y = y.ravel() # Преобразует (n, 1) в (n,) двумерный в одномерный
 
-# Стандартизация
+# Стандартизация 
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
   
@@ -64,34 +64,37 @@ predictions = l.predict(X_test)
 accuracy = np.mean(predictions == y_test)
 print(f"Точность Laplacian модели для test: {accuracy * 100:.2f}%")
 
+# Выбираем 1 класс 
+class_index = 0
+X_class = X[y == np.unique(y)[class_index]]
 
-def plot_distributions(X, y, feature_idx, class_idx, nb_normal, nb_laplace, class_label):
-    X_c = X[y == class_idx, feature_idx]
+# Выбираем один признак для анализа
+feature_index = 0
+feature_data = X_class[:, feature_index]
 
-    if len(X_c) == 0:
-        print(f"Для класса {class_label} и признака {feature_idx} нет данных.")
-        return  # Выход из функции, если данных нет
-    
-    # Эмпирическое распределение
-    plt.hist(X_c, bins=15, density=True, alpha=0.5, label='Эмпирическое')
-    
-    # Теоретическое нормальное распределение
-    M, D = nb_normal.M[class_idx, feature_idx], nb_normal.D[class_idx, feature_idx]
-    x = np.linspace(min(X_c), max(X_c), 100)
-    normal_pdf = (1/np.sqrt(2 * np.pi * D)) * np.exp(-(x - M)**2 / (2 * D))
-    plt.plot(x, normal_pdf, label='Нормальное распределение', color='blue')
-    
-    # Теоретическое лапласовское распределение
-    median, scale = nb_laplace.median[class_idx, feature_idx], nb_laplace.scale[class_idx, feature_idx]
-    laplace_pdf = (1/(2 * scale)) * np.exp(-np.abs(x - median) / scale)
-    plt.plot(x, laplace_pdf, label='Лапласовское распределение', color='red')
-    
-    plt.title(f'Признак {feature_idx} - Класс {class_label}')
-    plt.xlabel(features[feature_idx])
-    plt.ylabel('Плотность')
-    plt.legend()
-    plt.show()
+# Эмпирическое распределение (гистограмма)
+plt.hist(feature_data, bins=30, density=True, alpha=0.6, color='g', label='Эмпирическое распределение')
 
-# Построение графиков для всех признаков для одного класса (например, класса 0)
-for feature_idx in range(X_train.shape[1]):  # Для всех признаков
-    plot_distributions(X_train, y_train, feature_idx, 0, g, l, '0')
+# Теоретическое нормальное распределение
+mean = np.mean(feature_data)
+std = np.std(feature_data)
+x = np.linspace(np.min(feature_data), np.max(feature_data), 1000)
+normal_pdf = norm.pdf(x, mean, std)
+plt.plot(x, normal_pdf, 'r-', label=f'Нормальное распределение (μ={mean:.2f}, σ={std:.2f})')
+
+# Теоретическое Лаплассовское распределение
+median = np.median(feature_data)
+scale = np.median(np.abs(feature_data - median))  # Масштаб Лапласа (MAD)
+laplace_pdf = laplace.pdf(x, median, scale)
+plt.plot(x, laplace_pdf, 'b-', label=f'Лаплассово распределение (медиана={median:.2f}, масштаб={scale:.2f})')
+
+# Добавляем легенду
+plt.legend()
+
+# Добавляем подписи
+plt.title(f'Сравнение эмпирического и теоретических распределений для признака {feature_index}')
+plt.xlabel(f'Признак {feature_index}')
+plt.ylabel('Плотность вероятности')
+
+# Показываем график
+plt.show()
