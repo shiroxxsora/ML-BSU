@@ -34,10 +34,11 @@ class XORNeural:
 		optimizer = tf.optimizers.Adam(self.learning_rate)
 		
 		for epoch in range(self.epochs):
+			#Все операции, выполненные в блоке with, будут отслеживаться, чтобы можно было позже вычислить их производные.
 			with tf.GradientTape() as tape:
-				hidden_layer = self.activation_function(tf.matmul(X, self.w1) + self.b1)
-				output_layer = 1 / (1 + tf.exp(-(tf.matmul(hidden_layer, self.wo) + self.bo)))
-				loss = self.binary_cross_entropy(Y, output_layer)
+				hidden_layer = self.activation_function(tf.matmul(X, self.w1) + self.b1) # Прямой проход по скрытому слою
+				output_layer = 1 / (1 + tf.exp(-(tf.matmul(hidden_layer, self.wo) + self.bo))) # Прямой проход по выходному
+				loss = self.binary_cross_entropy(Y, output_layer) # Потеря для бинарных функций
 				
 			gradients = tape.gradient(loss, [self.w1, self.b1, self.wo, self.bo])
 			optimizer.apply_gradients(zip(gradients, [self.w1, self.b1, self.wo, self.bo]))
