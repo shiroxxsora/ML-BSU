@@ -27,7 +27,7 @@ class XORSigmoid:
 		# Проверка результатов
 		predictions = self.model.predict(X)
 		for i, (input_data, prediction) in enumerate(zip(X, predictions)):
-			print(f"Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
+			print(f"Sigmoid Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
 	
 class XORLinear:
 	def __init__(self):
@@ -51,7 +51,7 @@ class XORLinear:
 		# Проверка результатов
 		predictions = self.model.predict(X)
 		for i, (input_data, prediction) in enumerate(zip(X, predictions)):
-			print(f"Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
+			print(f"Linear Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
 		
 class XORReLu:
 	def __init__(self):
@@ -76,4 +76,4 @@ class XORReLu:
 		# Проверка результатов
 		predictions = self.model.predict(X)
 		for i, (input_data, prediction) in enumerate(zip(X, predictions)):
-			print(f"Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
+			print(f"ReLU Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
