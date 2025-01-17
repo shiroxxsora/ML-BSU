@@ -15,18 +15,18 @@ class XORNeural:
 		hidden_layer_count = 4 # Количество нейронов скрытого слоя
 		
 		# Скрытый слой
-		self.w1 = tf.Variable(tf.random.normal([2, hidden_layer_count], stddev=0.1), dtype=tf.float32)
-		self.b1 = tf.Variable([-1] * hidden_layer_count, dtype=tf.float32)
+		self.w1 = tf.Variable(tf.random.normal([2, hidden_layer_count]), dtype=tf.float32)
+		self.b1 = tf.Variable([-1], dtype=tf.float32)
 
 		# Выходной слой 1 нейрон
-		self.wo = tf.Variable(tf.random.normal([hidden_layer_count, 1], stddev=0.1), dtype=tf.float32)
+		self.wo = tf.Variable(tf.random.normal([hidden_layer_count, 1]), dtype=tf.float32)
 		self.bo = tf.Variable([-1], dtype=tf.float32)
 
 	def activation_function(self, x):
 		if self.activation == 'sigmoid':
 			return 1 / (1 + tf.exp(-x))  # Sigmoid
 		elif self.activation == 'relu':
-			return tf.maximum(0.0, x)  # ReLU
+			return tf.maximum(x, 0.0)  # ReLU
 		else:
 			return x  # Linear
 
