@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
 
 class XORNeural:
-	def __init__(self, activation='sigmoid', learning_rate=0.1, epochs=1000):
+	def __init__(self, activation='sigmoid', learning_rate=0.1, epochs=400):
 		self.activation = activation
 		self.learning_rate = learning_rate
 		self.epochs = epochs

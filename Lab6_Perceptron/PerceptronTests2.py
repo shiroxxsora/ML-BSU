@@ -20,13 +20,8 @@ def main():
     print(students.metadata)
 
     # Выбираем признаки для регрессии
-    selected_features = ['famrel', 'age', 'freetime', 'goout', 'Dalc', 'Walc', 'health', 'absences', 'sex', 'internet', 'higher', 'activities']
-    X = students.data.features[selected_features]
-    X['sex'] = X['sex'].map({'F': 1, 'M': -1})
-    X['internet'] = X['internet'].map({'yes': 1, 'no': 0})
-    X['higher'] = X['higher'].map({'yes': 1, 'no': 0})
-    X['activities'] = X['activities'].map({'yes': 1, 'no': 0})
-    X = X.values
+    selected_features = ['G1', 'G2']
+    X = students.data.targets[selected_features].values
 
     # Проверяем целевую переменную
     y = students.data.targets['G3'].values
@@ -44,44 +39,48 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Объекты нейросетей
-   # XORSigmoid  = Realization.Neural('sigmoid', len(selected_features), 0.001, 700)
-    XORLinear   = Realization.Neural('linear', len(selected_features), 0.1, 700)
-    XORReLu     = Realization.Neural('relu', len(selected_features), 0.1, 700)
+    XORSigmoid  = Realization.Neural('sigmoid', len(selected_features), 0.001, 1000)
+    XORLinear   = Realization.Neural('linear', len(selected_features), 0.001, 1000)
+    XORReLu     = Realization.Neural('relu', len(selected_features), 0.001, 1000)
 
     # Обучение в разных потоках
-   # t1 = threading.Thread(target=XORSigmoid.train, args=(X_train, y_train))
+    t1 = threading.Thread(target=XORSigmoid.train, args=(X_train, y_train))
     t2 = threading.Thread(target=XORLinear.train, args=(X_train, y_train))
     t3 = threading.Thread(target=XORReLu.train, args=(X_train, y_train))
 
     # Запуск потоков
-   # t1.start()
+    t1.start()
     t2.start()
     t3.start()
 
     # Ожидание обучения
-   # t1.join()
+    t1.join()
     t2.join()
     t3.join()
 
-       # Сохранение ответов
-   # predictSigmoid  = XORSigmoid.predict(X_test)
+    #XORSigmoid.train(X_train, y_train)
+    #XORLinear.train(X_train, y_train)
+    #XORReLu.train(X_train, y_train)
+
+    # Сохранение ответов
+    predictSigmoid  = XORSigmoid.predict(X_test)
     predictLinear   = XORLinear.predict(X_test)
     predictReLu     = XORReLu.predict(X_test)
 
     # Денормализация
-   # predictSigmoid  = y_scaler.inverse_transform(predictSigmoid)
-   # predictLinear   = y_scaler.inverse_transform(predictLinear)
-   # predictReLu     = y_scaler.inverse_transform(predictReLu)
+   # predictSigmoid = y_scaler.inverse_transform(predictSigmoid)
+   # predictLinear = y_scaler.inverse_transform(predictLinear)
+   # predictReLu = y_scaler.inverse_transform(predictReLu)
 
     # Денормализация y_test для дальнейшего сравнения
    # y_test_denorm = y_scaler.inverse_transform(y_test.reshape(-1, 1)).ravel()
 
-   # mseSigmoid  = mean_squared_error(y_test, predictSigmoid)
+    mseSigmoid  = mean_squared_error(y_test, predictSigmoid)
     mseLinear   = mean_squared_error(y_test, predictLinear)
     mseReLu     = mean_squared_error(y_test, predictReLu)
 
     # Вывод результатов
-   # print(f"Sigmoid mse {mseSigmoid}")
+    print(f"Sigmoid mse {mseSigmoid}")
 
     print(f"Linear mse {mseLinear}")
 
@@ -89,7 +88,7 @@ def main():
 
     plt.figure(figsize=(10, 6))
     plt.plot(y_test, label="Действительное значение", linestyle='--')
-   # plt.plot(predictSigmoid, label="Sigmoid Prediction")
+    plt.plot(predictSigmoid, label="Sigmoid Prediction")
     plt.plot(predictLinear, label="Linear Prediction")
     plt.plot(predictReLu, label="ReLU Prediction")
     plt.legend()
