@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class GuassianNaiveBayes:
     def __init__(self, X, y):
         print(y.shape)
@@ -41,6 +42,7 @@ class GuassianNaiveBayes:
 
         # Возвращаем класс с максимальной вероятностью
         return self.classes[np.argmax(postariors)]
+
 
 class LaplacianNaiveBayes:
     def __init__(self, X, y):

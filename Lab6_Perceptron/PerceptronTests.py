@@ -4,12 +4,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
-
 import matplotlib.pyplot as plt
-
 import PerceptronRealization as Realization
-
 from ucimlrepo import fetch_ucirepo
+
 
 def main():
     plt.switch_backend('Qt5Agg') 
@@ -45,8 +43,8 @@ def main():
 
     # Объекты нейросетей
    # XORSigmoid  = Realization.Neural('sigmoid', len(selected_features), 0.001, 700)
-    XORLinear   = Realization.Neural('linear', len(selected_features), 0.1, 700)
-    XORReLu     = Realization.Neural('relu', len(selected_features), 0.1, 700)
+    XORLinear   = Realization.Neural('linear', len(selected_features), 0.07, 1500)
+    XORReLu     = Realization.Neural('relu', len(selected_features), 0.07, 1500)
 
     # Обучение в разных потоках
    # t1 = threading.Thread(target=XORSigmoid.train, args=(X_train, y_train))

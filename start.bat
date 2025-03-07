@@ -1,1 +1,0 @@
-C:\ProgramData\anaconda3\Scripts\jupyter-notebook

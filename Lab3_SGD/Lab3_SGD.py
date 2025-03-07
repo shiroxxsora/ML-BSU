@@ -16,18 +16,18 @@ class SGD_Ridge:
         self.Y_test = np.array([Y[i] for i in test_idx])
 
 
-        self.w = self.InitW()
+        self.w = self.init_w()
         self.cycles = cycles
         self.tau = tau
-        self.SGD()
-        self.Q(self.X_train, self.Y_train, self.w, self.tau)
+        self.sgd()
+        self.q(self.X_train, self.Y_train, self.w, self.tau)
 
-    def InitW(self):
+    def init_w(self):
         return np.random.rand(len(X[1]))
 
-    def SGD(self):
+    def sgd(self):
 
-        self.Q(self.X_train, self.Y_train, self.w, self.tau)
+        self.q(self.X_train, self.Y_train, self.w, self.tau)
         print("----------------------------------")
 
         #DrawEduPlots = []
@@ -36,15 +36,15 @@ class SGD_Ridge:
             x = self.X_train[rand_idx]
             y = self.Y_train[rand_idx]
             h = 1/j
-            self.w = self.w*(1 - h*self.tau) - h * self.Gradient(x, y, self.w)
+            self.w = self.w*(1 - h*self.tau) - h * self.gradient(x, y, self.w)
 
             #DrawEduPlots.append((j, self.Q(self.X_train, self.Y_train, self.w, self.tau)))
         #self.DrawEduPlot(DrawEduPlots)
 
         print("----------------------------------")
-        self.Q(self.X_train, self.Y_train, self.w, self.tau)
+        self.q(self.X_train, self.Y_train, self.w, self.tau)
 
-    def CrossValidation(self):
+    def cross_validation(self):
         pass
 
     def r_squared(self, y_true, y_pred):
@@ -60,30 +60,30 @@ class SGD_Ridge:
 
         return R_2
 
-    def PredictTest(self):
+    def predict_test(self):
         pred = np.dot(self.X_test, self.w)
         r2 = self.r_squared(self.Y_test, pred)
 
         return r2
         
-    def PredictTrain(self):
+    def predict_train(self):
         pred = np.dot(self.X_train, self.w)
         r2 = self.r_squared(self.Y_train, pred)
 
         return r2
 
-    def Loss(self, x, y, w, tau):
+    def loss(self, x, y, w, tau):
         return (np.dot(w, x) - y)**2 + 0.5 * tau * (np.linalg.norm(w)**2)
 
-    def Gradient(self, x, y, w):
+    def gradient(self, x, y, w):
         return np.dot((np.dot(w, x) - y), x)
 
     # Показатель качества
-    def Q(self, X, Y, w, tau):
-        print(f" w = {w} Q = {np.sum([self.Loss(x, y, w, tau) for x, y in zip(X, Y)])/len(X)}")
-        return np.sum([self.Loss(x, y, w, tau) for x, y in zip(X, Y)])/len(X)
+    def q(self, X, Y, w, tau):
+        print(f" w = {w} Q = {np.sum([self.loss(x, y, w, tau) for x, y in zip(X, Y)]) / len(X)}")
+        return np.sum([self.loss(x, y, w, tau) for x, y in zip(X, Y)])/len(X)
 
-    def DrawPlot(self):
+    def draw_plot(self):
         pred = np.dot(self.X_train, self.w)
         plt.plot(self.Y_train, pred, 'ro')
         plt.xlabel('y')
@@ -91,7 +91,7 @@ class SGD_Ridge:
         plt.title('Ответ vs. Предсказание')
         plt.show()
 
-    def DrawEduPlot(self, arr):
+    def draw_edu_plot(self, arr):
         data = np.array(arr)
         data = data.T
         plt.plot(data[0], data[1], 'ro')
@@ -129,8 +129,8 @@ if __name__ == "__main__":
     sgds = []
     for tau in taus:
         sgd = SGD_Ridge(X, Y, tau)
-        r2_scores.append(sgd.PredictTrain())
-        r2_scores_test.append(sgd.PredictTest())
+        r2_scores.append(sgd.predict_train())
+        r2_scores_test.append(sgd.predict_test())
         sgds.append(sgd)
 
     print(r2_scores)
@@ -142,13 +142,13 @@ if __name__ == "__main__":
     plt.show()
 
     sgd = sgds[np.argmax(r2_scores_test)]
-    Q = sgd.Q(sgd.X_test, sgd.Y_test, sgd.w, sgd.tau)
-    r2 = sgd.PredictTest()
+    Q = sgd.q(sgd.X_test, sgd.Y_test, sgd.w, sgd.tau)
+    r2 = sgd.predict_test()
 
     print(f"Функционал качества: {Q}")
     print(f"Веса w: {sgd.w}")
     print(f"Коэф. детерминации: {r2}")
 
-    sgd.DrawPlot()
+    sgd.draw_plot()
 
     #algorithm = SGD_Ridge(X, Y, 1, 1)

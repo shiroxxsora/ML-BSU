@@ -28,7 +28,8 @@ class XORSigmoid:
 		predictions = self.model.predict(X)
 		for i, (input_data, prediction) in enumerate(zip(X, predictions)):
 			print(f"Sigmoid Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
-	
+
+
 class XORLinear:
 	def __init__(self):
 		inputs = keras.Input(shape=(2,)) # Входной слой с 2 параметрами
@@ -52,7 +53,8 @@ class XORLinear:
 		predictions = self.model.predict(X)
 		for i, (input_data, prediction) in enumerate(zip(X, predictions)):
 			print(f"Linear Input: {input_data}, Predicted: {prediction[0]:.4f}, Actual: {y[i]}")
-		
+
+
 class XORReLu:
 	def __init__(self):
 		# Создание модели через апи keras

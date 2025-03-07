@@ -1,9 +1,9 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
 
 if __name__ == "__main__":
-	print(f"TF version {tf.__version__}")
+	print(tf.__file__)
+	print(tf.__version__)
 
 
 class Neural:

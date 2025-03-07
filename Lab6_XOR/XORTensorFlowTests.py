@@ -2,6 +2,7 @@ import threading
 import XORTensorFlowRealization as XORRealization
 import numpy as np
 
+
 def main():
 
     # Данные
