@@ -1,6 +1,8 @@
-tensorflow
+tensorflow[and-cuda]
 numpy
 scikit-learn
 matplotlib
 ucimlrepo
 pyqt5
+opencv-python
+kagglehub
